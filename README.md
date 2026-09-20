@@ -7,6 +7,7 @@
 - **Cost Estimator**: Interactive calculator to estimate vertical garden pricing based on dimensions and plant density.
 - **Client Showcase**: Project gallery, video tours, and client portfolio.
 - **Direct Lead Generation**: WhatsApp and phone inquiry integration with quick quote modal.
+- **Social & Media Integration**: Official Instagram feed & highlights showcase (`@thatsitgreenwall`) with floating quick-connect dock.
 
 ## Tech Stack
 - HTML5 / CSS3 / Vanilla JavaScript

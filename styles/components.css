@@ -1034,31 +1034,335 @@
   }
 }
 
-/* ==========================================================================
-   FLOATING WHATSAPP BUTTON & MODALS
-   ========================================================================== */
-.floating-whatsapp {
+/* Floating Action Dock (WhatsApp & Instagram) */
+.floating-actions-dock {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   z-index: 999;
-  width: 62px;
-  height: 62px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.floating-action-btn {
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: #25d366;
-  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.5);
-  transition: all var(--transition-fast);
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   cursor: pointer;
+  text-decoration: none;
+}
+
+.floating-whatsapp {
+  background: #25d366;
+  color: var(--white);
+  font-size: 1.8rem;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
 }
 
 .floating-whatsapp:hover {
   transform: scale(1.1);
   box-shadow: 0 12px 30px rgba(37, 211, 102, 0.7);
+}
+
+.floating-instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: var(--white);
+  box-shadow: 0 8px 24px rgba(220, 39, 67, 0.45);
+}
+
+.floating-instagram:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(220, 39, 67, 0.7);
+}
+
+.floating-action-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Floating button tooltips */
+.floating-action-btn .btn-tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  background: var(--emerald-950);
+  color: var(--white);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(8px);
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.floating-action-btn:hover .btn-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 576px) {
+  .floating-actions-dock {
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+  .floating-action-btn {
+    width: 52px;
+    height: 52px;
+  }
+  .floating-action-btn .btn-tooltip {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   INSTAGRAM SHOWCASE & FEED COMPONENT
+   ========================================================================== */
+.instagram-section {
+  background: linear-gradient(180deg, var(--white) 0%, var(--emerald-50) 100%);
+  border-top: 1px solid var(--emerald-100);
+  border-bottom: 1px solid var(--emerald-100);
+  position: relative;
+  overflow: hidden;
+}
+
+.insta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.insta-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(220, 39, 67, 0.1);
+  color: #dc2743;
+  border: 1px solid rgba(220, 39, 67, 0.2);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.insta-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: block;
+  text-decoration: none;
+  background: var(--emerald-900);
+}
+
+.insta-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.insta-card-badge {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  z-index: 2;
+}
+
+.insta-type-icon {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  z-index: 2;
+}
+
+.insta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(4, 26, 19, 0.92) 0%, rgba(220, 39, 67, 0.6) 60%, rgba(240, 148, 51, 0.3) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.25rem;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: 3;
+}
+
+.insta-card:hover .insta-overlay {
+  opacity: 1;
+}
+
+.insta-card:hover img {
+  transform: scale(1.08);
+}
+
+.insta-overlay-text {
+  color: var(--white);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.insta-overlay-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--gold-300);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.insta-cta-box {
+  background: var(--white);
+  border: 1.5px dashed var(--emerald-200);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.insta-cta-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.insta-cta-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, #f09433, #dc2743, #cc2366);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.insta-cta-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--white);
+}
+
+.insta-cta-handle {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--emerald-950);
+}
+
+.insta-cta-handle span {
+  color: #dc2743;
+}
+
+.insta-cta-desc {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+@media (max-width: 992px) {
+  .insta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .insta-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .insta-cta-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .insta-cta-info {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.footer-social-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.footer-social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.footer-social-link:hover {
+  background: var(--emerald-500);
+  color: var(--white);
+  transform: translateY(-3px);
+}
+
+.footer-social-link.insta:hover {
+  background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+}
+
+.footer-social-link.whatsapp:hover {
+  background: #25d366;
 }
 
 /* Modal Dialog */
